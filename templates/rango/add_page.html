@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Rango</title>
+  </head>
+
+  <body>
+    {% if category %}
+      <h1>Add a Page</h1>
+      <!--<p>--DEBUG-- Adding to category: {{ category.name }}</p> -->
+      <div>
+        <form id="page_form" method="POST" action="/rango/category/{{ category.slug }}/add_page/">
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+          {% for field in form.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field }}
+          {% endfor %}
+          <input type="submit" name="submit" value="Create Page" />
+        </form>
+      </div>
+    {% else %}
+      You're trying to add a page to a category that does not exist!<br />
+    {% endif %}
+    <a href="/rango/">Back to index...</a><br />
+  </body>
+</html>
