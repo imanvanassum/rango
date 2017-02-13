@@ -1,24 +1,15 @@
-<!DOCTYPE html>
-
+{% extends 'rango/base.html' %}
 {% load staticfiles %}
 
-<html>
-  <head>
-    <link rel="stylesheet" href="{% static "css/base.css" %}" />
-    <script src="{% static "js/jquery.js" %}"></script>
-    <title>About</title>
-  </head>
+{% block title_block %}
+  About
+{% endblock %}
 
-  <body>
-    <h1>About Rango...</h1>
-    <div>
-      This tutorial has been put together by Iman <br />
+{% block body_block %}
+  <h1>About Rango...</h1>
+  <div>
+    This tutorial has been put together by Iman <br />
+    <img src="{%static "media/pepe.jpg" %}" alt="Pepeeeeee" />
+  </div>
 
-    </div>
-
-    <div>
-      <a href="/rango/">Index</a><br />
-      <img src="{%static "media/pepe.jpg" %}" alt="Pepeeeeee" />
-    </div>
-  </body>
-</html>
+{% endblock %}
