@@ -14,6 +14,7 @@
     <div>Hey there partner!</div>
 
     <div>
+      <h2>Most liked categories</h2>
       {% if categories %}
       <ul>
         {% for category in categories %}
@@ -28,7 +29,23 @@
     </div>
 
     <div>
+      <h2>Most viewed pages</h2>
+      {% if pages %}
+      <ul>
+        {% for page in pages %}
+        <li>
+          <a href="{{ page.url }}">{{ page.title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+        <strong> No pages have been viewed yet </strong>
+      {% endif %}
+    </div>
+
+    <div>
       <a href="/rango/about/">About</a><br />
+      <a href="/rango/add_category/">Add a new category</a><br />
       <img src="{%static "images/rango-009.jpg" %}" alt="Picture of Rango" />
     </div>
   </body>
