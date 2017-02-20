@@ -1,49 +1,50 @@
-{% extends 'rango/base.html' %}
+{% extends 'rango/base_bootstrap.html' %}
+{# extends 'rango/base.html' #}
 {% load staticfiles %}
 
 {% block title_block %}
+  Index
 {% endblock %}
 
 {% block body_block %}
-  <h1>Rango says...</h1>
-  <div>
-    {% if user.is_authenticated %}
-      Howdy {{ user.username }}!
-    {% else %}
-      Hey there partner!
-    {% endif %}
-  </div>
+<div class="jumbotron">
+  <h1 class="display-3">Rango says...</h1>
+  {% if user.is_authenticated %}
+    <h1>howdy {{ user.username }}!</h1>
+  {% else %}
+    <h1>hey there partner! </h1>
+  {% endif %}
+</div>
 
-  <div>
-    <h2>Most liked categories</h2>
-    {% if categories %}
-    <ul>
-      {% for category in categories %}
-      <li>
-        <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
-      </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-      <strong>There are no categories present </strong>
-    {% endif %}
+<div class="row marketing">
+  <div class="col-lg-6">
+    <h4>Most liked categories</h4>
+    <p>
+      {% if categories %}
+      <ul>
+        {% for category in categories %}
+        <li><a href="{% url 'show_category' category.slug %}">{{ category.name }}</a></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+        <strong>There are no categories present </strong>
+      {% endif %}
+    </p>
   </div>
-
-  <div>
-    <h2>Most viewed pages</h2>
-    {% if pages %}
-    <ul>
-      {% for page in pages %}
-      <li>
-        <a href="{{ page.url }}">{{ page.title }}</a>
-      </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-      <strong> No pages have been viewed yet </strong>
-    {% endif %}
+  <div class="col-lg-6">
+    <h4>Most viewed pages</h4>
+    <p>
+      {% if pages %}
+      <ul>
+        {% for page in pages %}
+        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+        <strong> No pages have been viewed yet </strong>
+      {% endif %}
+    </p>
   </div>
 
   <img src="{%static "images/rango-009.jpg" %}" alt="Picture of Rango" />
-
 {% endblock %}

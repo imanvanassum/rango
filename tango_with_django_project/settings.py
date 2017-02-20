@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -130,4 +131,18 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
-LOGIN_URL = '/rango/login/'
+LOGIN_URL = '/accounts/login/'
+
+# For registration-redux
+
+#If True, users can register
+REGISTRATION_OPEN = True
+# One-week activation window.
+ACCOUNT_ACTIVATION_DAYS = 7
+# If true, the user will be automatically logged in.
+REGISTRATION_AUTO_LOGIN = True
+# The page you want users to arrive at after they successfully log in.
+LOGIN_REDIRECT_URL = '/rango/'
+# The page users are directed to if they are not logged in,
+# and are trying to access pages requiring Authentication
+LOGIN_URL = '/accounts/login/'
