@@ -1,18 +1,30 @@
-import json
+import json, os
 import urllib.parse
 import urllib.request
 
 def main():
-    pass
-
+    s = input('Enter search query:')
+    a = run_query(s)
+    print(a)
+    
 def read_webhose_key():
     webhose_api_key = None
+    script_full_path = os.path.abspath(__file__)
+    script_dir = os.path.dirname(script_full_path)
+    one_dir_lower = os.path.dirname(script_dir)
+    key_in_base_dir = os.path.join(one_dir_lower,'search.key')
+    key_in_app_dir = os.path.join(script_dir,'search.key')
+
 
     try:
-        with open('search.key', 'r') as f:
+        with open(key_in_base_dir, 'r') as f:
             webhose_api_key = f.readline().strip()
     except:
-        raise IOError('search.key file not found')
+        try:
+            with open(key_in_app_dir, 'r') as f:
+                webhose_api_key = f.readline().strip()
+        except:
+            raise IOError('search.key file not found')
 
     return webhose_api_key
 
