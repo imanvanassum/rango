@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from rango.models import Category, Page
@@ -43,7 +43,7 @@ def show_category(request, category_name_slug):
 
         # Retrieve all of the associated pages.
         # Note that filter() will return a list of page objects or an empty list
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
 
         # Adds our results list to the template context under name pages.
         context_dict['pages'] = pages
@@ -55,6 +55,17 @@ def show_category(request, category_name_slug):
         # Don't do anything - the template will display the "no category" message for us.
         context_dict['category'] = None
         context_dict['pages'] = None
+
+    result_list = []
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            # Run our WebHose search function to get the results list
+            result_list = run_query(query)
+            context_dict['result_list'] = result_list
+            context_dict['old_query'] = query
+            return render(request, 'rango/category.html', context_dict)
 
     # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context_dict)
@@ -113,8 +124,24 @@ def search(request):
         if query:
             # Run our WebHose search function to get the results list
             result_list = run_query(query)
+            old_query = query
+            return render(request, 'rango/search.html', {'result_list': result_list, 'old_query': query })
 
-    return render(request, 'rango/search.html', {'result_list': result_list})
+    return render(request, 'rango/search.html', {'result_list': result_list, })
+
+def track_url(request):
+    # If we reach this method it's because somebody clicked on a page result in the category template.
+    # We then retrieve the page_id from the request and use it to retrieve the corresponding page data from
+    # the DB, increase the amount of views by 1 and redirect the browser to the URL of the selected page.
+    page_id = None
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            page = Page.objects.get(id=page_id)
+            page.views = page.views + 1
+            page.save()
+            return redirect(page.url)
+
 
 @login_required
 def restricted(request):
@@ -143,3 +170,25 @@ def visitor_cookie_handler(request):
 
     # Update/set the visits cookie
     request.session['visits'] = visits
+
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+
+            return redirect('index')
+        else:
+            print(form.errors)
+
+    context_dict = {'form':form}
+
+    return render(request, 'rango/profile_registration.html', context_dict)
+    
+def profile():
+    pass

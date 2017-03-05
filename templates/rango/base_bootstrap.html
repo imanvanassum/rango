@@ -39,13 +39,16 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'about' %}">About</a>
             </li>
-            <li class="nav-item">
+            <!-- removing this to put it in the category view instead<li class="nav-item">
               <a class="nav-link" href="{% url 'search' %}">Search</a>
-            </li>
+            </li>-->
 
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'add_category' %}">Add a New Category</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile' %}">Edit profile</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/">Logout</a>
